@@ -1,7 +1,6 @@
 #include "author.h"
 #include "database.h"
 
-
 #include "../config/config.h"
 #include <Poco/Data/MySQL/Connector.h>
 #include <Poco/Data/MySQL/MySQLException.h>
@@ -139,8 +138,7 @@ namespace database
 
             while (!select.done())
             {
-                select.execute();
-                result.push_back(a);
+                if(select.execute()) result.push_back(a);
             }
             return result;
         }
@@ -178,8 +176,7 @@ namespace database
 
             while (!select.done())
             {
-                select.execute();
-                result.push_back(a);
+                if(select.execute()) result.push_back(a);
             }
             return result;
         }
@@ -224,7 +221,6 @@ namespace database
                 use(_email),
                 use(_title),
                 now;
-
 
             Poco::Data::Statement select(session);
             select << "SELECT LAST_INSERT_ID()",

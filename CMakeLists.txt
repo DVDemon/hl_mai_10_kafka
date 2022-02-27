@@ -6,7 +6,6 @@ SET (EXAMPLE_BINARY "event_server")
 SET (WRITER_BINARY  "event_writer")
 
 find_package(OpenSSL)
-find_package(GTest REQUIRED)
 find_package(Threads)
 find_package(ZLIB)
 find_package(Poco REQUIRED COMPONENTS Foundation Util Net XML JSON Crypto NetSSL)
@@ -18,11 +17,7 @@ if(NOT ${Poco_FOUND})
 endif()
 
 include_directories(${Poco_INCLUDE_DIRS})
-include_directories(${GTEST_INCLUDE_DIRS})
-include_directories("/usr/include/mysql")
-include_directories("/usr/local/include/mysql")
 include_directories(${Boost_INCLUDE_DIR})
-link_directories("/usr/local/lib")
 
 add_executable(${EXAMPLE_BINARY} main.cpp 
                                  config/config.cpp 
@@ -43,9 +38,8 @@ target_compile_options(${WRITER_BINARY} PRIVATE -Wall -Wextra -pedantic -Werror 
 target_link_libraries(${EXAMPLE_BINARY} PRIVATE 
                              ${CMAKE_THREAD_LIBS_INIT} 
                              ${Poco_LIBRARIES}
-                             "libPocoData.so"
-                             "libPocoDataMySQL.so"
-                             "libmysqlclient.so"
+                             "PocoData"
+                             "PocoDataMySQL"
                              "rdkafka++"
                              CppKafka::cppkafka
                              ZLIB::ZLIB
@@ -54,9 +48,8 @@ target_link_libraries(${EXAMPLE_BINARY} PRIVATE
 target_link_libraries(${WRITER_BINARY} PRIVATE 
                              ${CMAKE_THREAD_LIBS_INIT} 
                              ${Poco_LIBRARIES}
-                             "libPocoData.so"
-                             "libPocoDataMySQL.so"
-                             "libmysqlclient.so"
+                             "PocoData"
+                             "PocoDataMySQL"
                              "rdkafka++"
                              CppKafka::cppkafka
                              ZLIB::ZLIB

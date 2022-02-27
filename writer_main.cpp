@@ -10,7 +10,7 @@ namespace po = boost::program_options;
 
 bool running = true;
 
-int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
+int main(int argc, char *argv[])
 {
     try
     {
@@ -42,9 +42,9 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
         if (vm.count("group_id"))
             Config::get().queue_group_id() = vm["group_id"].as<std::string>();
 
-
         // Stop processing on SIGINT
-        signal(SIGINT, [](int) { running = false; });
+        signal(SIGINT, [](int)
+               { running = false; });
 
         // Construct the configuration
         cppkafka::Configuration config = {
@@ -57,14 +57,12 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[])
         cppkafka::Consumer consumer(config);
 
         // Print the assigned partitions on assignment
-        consumer.set_assignment_callback([](const cppkafka::TopicPartitionList &partitions) {
-            std::cout << "Got assigned: " << partitions << std::endl;
-        });
+        consumer.set_assignment_callback([](const cppkafka::TopicPartitionList &partitions)
+                                         { std::cout << "Got assigned: " << partitions << std::endl; });
 
         // Print the revoked partitions on revocation
-        consumer.set_revocation_callback([](const cppkafka::TopicPartitionList &partitions) {
-            std::cout << "Got revoked: " << partitions << std::endl;
-        });
+        consumer.set_revocation_callback([](const cppkafka::TopicPartitionList &partitions)
+                                         { std::cout << "Got revoked: " << partitions << std::endl; });
 
         // Subscribe to the topic
         consumer.subscribe({Config::get().get_queue_topic()});

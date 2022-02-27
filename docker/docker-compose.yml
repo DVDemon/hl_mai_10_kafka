@@ -1,14 +1,18 @@
 version: '3.3'
 services:
     zookeeper:
-        image: wurstmeister/zookeeper
+        image: zookeeper
         container_name: zookeeper
 
     kafka-node-1:
-        image: wurstmeister/kafka
+        # image: wurstmeister/kafka
+        image: nyadesu/kafka-docker
         container_name: kafka-node-1
         ports:
+            - "2181:2181"
             - "9092:9092"
         environment:
             KAFKA_ADVERTISED_HOST_NAME: localhost
             KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+            ADVERTISED_PORT: 9092
+            ADVERTISED_HOST_NAME: localhost
