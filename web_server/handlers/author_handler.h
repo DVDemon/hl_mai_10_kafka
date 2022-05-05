@@ -168,8 +168,10 @@ public:
                                 {
                                     try
                                     {
-                                        //author.insert();
+                                        //author.save_to_mysql();
+                                        static int i=0;
                                         author.send_to_queue();
+                                        std::cout << "send to queue: " << std::to_string(++i)  << std::endl;
                                         ostr << "{ \"result\": true }";
                                         return;
                                     }

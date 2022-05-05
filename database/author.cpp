@@ -138,7 +138,8 @@ namespace database
 
             while (!select.done())
             {
-                if(select.execute()) result.push_back(a);
+                if (select.execute())
+                    result.push_back(a);
             }
             return result;
         }
@@ -176,7 +177,8 @@ namespace database
 
             while (!select.done())
             {
-                if(select.execute()) result.push_back(a);
+                if (select.execute())
+                    result.push_back(a);
             }
             return result;
         }
@@ -194,17 +196,31 @@ namespace database
         }
     }
 
+    #include <mutex>
     void Author::send_to_queue()
     {
-        cppkafka::Configuration config = {
+        static cppkafka::Configuration config = {
             {"metadata.broker.list", Config::get().get_queue_host()}};
 
-        cppkafka::Producer producer(config);
+        static cppkafka::Producer producer(config);
+        static std::mutex mtx;
+        std::lock_guard<std::mutex> lock(mtx);
         std::stringstream ss;
         Poco::JSON::Stringifier::stringify(toJSON(), ss);
         std::string message = ss.str();
-        producer.produce(cppkafka::MessageBuilder(Config::get().get_queue_topic()).partition(0).payload(message));
-        producer.flush();
+        bool not_sent = true;
+        while (not_sent)
+        {
+            try
+            {
+                producer.produce(cppkafka::MessageBuilder(Config::get().get_queue_topic()).partition(0).payload(message));
+                //producer.flush(); // из-за этого тормозило
+                not_sent = false;
+            }
+            catch (...)
+            {
+            }
+        }
     }
 
     void Author::save_to_mysql()
