@@ -127,7 +127,7 @@ public:
         else
         {
 
-            if (form.has("add"))
+            if (request.getMethod()==Poco::Net::HTTPServerRequest::HTTP_POST)
                 if (form.has("first_name"))
                     if (form.has("last_name"))
                         if (form.has("email"))
@@ -189,11 +189,11 @@ public:
                             }
         }
 
-        auto results = database::Author::read_all();
+       /* auto results = database::Author::read_all();
         Poco::JSON::Array arr;
         for (auto s : results)
             arr.add(s.toJSON());
-        Poco::JSON::Stringifier::stringify(arr, ostr);
+        Poco::JSON::Stringifier::stringify(arr, ostr);*/
     }
 
 private:
