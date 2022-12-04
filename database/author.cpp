@@ -199,7 +199,7 @@ namespace database
     #include <mutex>
     void Author::send_to_queue()
     {
-        static cppkafka::Configuration config = [&](){
+       /** static cppkafka::Configuration config = [&](){
             cppkafka::Configuration config={
             {"metadata.broker.list", Config::get().get_queue_host()}};
             std::vector<cppkafka::ConfigurationOption> options;
@@ -207,27 +207,32 @@ namespace database
             config.set(options);
             std::cout << "kafka configured" << std::endl;
             return config;
-        }();
+        }();*/
+        static cppkafka::Configuration config ={
+            {"metadata.broker.list", Config::get().get_queue_host()},
+            {"acks","all"}};
         static cppkafka::Producer producer(config);
         static std::mutex mtx;
+        static int message_key{0};
+        using Hdr = cppkafka::MessageBuilder::HeaderType;
         
-
-
         std::lock_guard<std::mutex> lock(mtx);
         std::stringstream ss;
         Poco::JSON::Stringifier::stringify(toJSON(), ss);
         std::string message = ss.str();
         bool not_sent = true;
+
         cppkafka::MessageBuilder builder(Config::get().get_queue_topic());
-        builder.payload(message);
+        std::string mk=std::to_string(++message_key);
+        builder.key(mk); // set some key
+        builder.header(Hdr{"producer_type","author writer"}); // set some custom header
+        builder.payload(message); // set message
+
         while (not_sent)
         {
             try
             {
                 producer.produce(builder);
-                
-                //producer.produce(cppkafka::MessageBuilder(Config::get().get_queue_topic()).partition(0).payload(message));
-                //producer.flush(); // из-за этого тормозило
                 not_sent = false;
             }
             catch (...)
