@@ -70,6 +70,14 @@ services:
         - QUEUE_HOST=kafka1:9092
         - QUEUE_TOPIC=event_server
         - QUEUE_GROUP_ID=0
+      ports:
+        - 8080:8080
+      networks:
+        - arch-network
+      depends_on:
+        - kafka1
+        - db-node-1 
+        
     my_writer:
       build:
         context: my_writer
@@ -84,17 +92,12 @@ services:
         - QUEUE_HOST=kafka1:9092
         - QUEUE_TOPIC=event_server
         - QUEUE_GROUP_ID=0
-      ports:
-        - 8080:8080
       networks:
         - arch-network
       depends_on:
-        - proxysql
-        - cache
         - kafka1
         - db-node-1
-        - db-node-2
-        - db-node-3
+
 
 networks:
   arch-network:
