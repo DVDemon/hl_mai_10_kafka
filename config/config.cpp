@@ -2,7 +2,16 @@
 
 Config::Config()
 {
+    _host = std::getenv("DB_HOST");
+    _port = std::getenv("DB_PORT");
+    _login = std::getenv("DB_LOGIN");
+    _password = std::getenv("DB_PASSWORD");
+    _database = std::getenv("DB_DATABASE");
+    _queue_host = std::getenv("QUEUE_HOST");
+    _queue_topic = std::getenv("QUEUE_TOPIC");
+    _queue_group_id  = std::getenv("QUEUE_GROUP_ID");
 }
+
 
 Config &Config::get()
 {
@@ -45,14 +54,9 @@ const std::string &Config::get_port() const
     return _port;
 }
 
-const std::string &Config::get_read_request_ip() const
+const std::string &Config::get_host() const
 {
-    return _read_request_ip;
-}
-
-const std::string &Config::get_write_request_ip() const
-{
-    return _write_request_ip;
+    return _host;
 }
 
 const std::string &Config::get_login() const
@@ -72,16 +76,6 @@ const std::string &Config::get_database() const
 std::string &Config::port()
 {
     return _port;
-}
-
-std::string &Config::read_request_ip()
-{
-    return _read_request_ip;
-}
-
-std::string &Config::write_request_ip()
-{
-    return _write_request_ip;
 }
 
 std::string &Config::login()

@@ -44,184 +44,24 @@ using Poco::Util::ServerApplication;
 
 class HTTPWebServer : public Poco::Util::ServerApplication
 {
-public:
-    HTTPWebServer() : _helpRequested(false){
-    }
-
-    ~HTTPWebServer(){
-    }
 
 protected:
-    void initialize(Application &self)
-    {
-        loadConfiguration();
-        ServerApplication::initialize(self);
-    }
-
-    void uninitialize()
-    {
-        ServerApplication::uninitialize();
-    }
-
-    void defineOptions(OptionSet &options)
-    {
-        ServerApplication::defineOptions(options);
-
-        options.addOption(
-            Option("help", "h", "display argument help information")
-                .required(false)
-                .repeatable(false)
-                .callback(OptionCallback<HTTPWebServer>(this, &HTTPWebServer::handleHelp)));
-        options.addOption(
-            Option("read", "r", "set ip address for read requests")
-                .required(false)
-                .repeatable(false)
-                .argument("value")
-                .callback(OptionCallback<HTTPWebServer>(this, &HTTPWebServer::handleReadIP)));
-        options.addOption(
-            Option("write", "w", "set ip address for write requests")
-                .required(false)
-                .repeatable(false)
-                .argument("value")
-                .callback(OptionCallback<HTTPWebServer>(this, &HTTPWebServer::handleWriteIP)));
-        options.addOption(
-            Option("port", "po", "set mysql port")
-                .required(false)
-                .repeatable(false)
-                .argument("value")
-                .callback(OptionCallback<HTTPWebServer>(this, &HTTPWebServer::handlePort)));
-        options.addOption(
-            Option("login", "lg", "set mysql login")
-                .required(false)
-                .repeatable(false)
-                .argument("value")
-                .callback(OptionCallback<HTTPWebServer>(this, &HTTPWebServer::handleLogin)));
-        options.addOption(
-            Option("password", "pw", "set mysql password")
-                .required(false)
-                .repeatable(false)
-                .argument("value")
-                .callback(OptionCallback<HTTPWebServer>(this, &HTTPWebServer::handlePassword)));
-        options.addOption(
-            Option("database", "db", "set mysql database")
-                .required(false)
-                .repeatable(false)
-                .argument("value")
-                .callback(OptionCallback<HTTPWebServer>(this, &HTTPWebServer::handleDatabase)));
-        options.addOption(
-            Option("init_db", "it", "create database tables")
-                .required(false)
-                .repeatable(false)
-                .callback(OptionCallback<HTTPWebServer>(this, &HTTPWebServer::handleInitDB)));
-        options.addOption(
-            Option("queue", "q", "set queue host")
-                .required(false)
-                .repeatable(false)
-                .argument("value")
-                .callback(OptionCallback<HTTPWebServer>(this, &HTTPWebServer::handleQueueHost)));
-        options.addOption(
-            Option("topic", "t", "set queue topic")
-                .required(false)
-                .repeatable(false)
-                .argument("value")
-                .callback(OptionCallback<HTTPWebServer>(this, &HTTPWebServer::handleQueueTopic)));
-    }
-
-    void handleInitDB([[maybe_unused]] const std::string &name,
-                      [[maybe_unused]] const std::string &value)
-    {
-        std::cout << "init db" << std::endl;
-        database::Author::init();
-    }
-    void handleLogin([[maybe_unused]] const std::string &name,
-                     [[maybe_unused]] const std::string &value)
-    {
-        std::cout << "login:" << value << std::endl;
-        Config::get().login() = value;
-    }
-    void handlePassword([[maybe_unused]] const std::string &name,
-                        [[maybe_unused]] const std::string &value)
-    {
-        std::cout << "password:" << value << std::endl;
-        Config::get().password() = value;
-    }
-
-     void handleDatabase([[maybe_unused]] const std::string &name,
-                         [[maybe_unused]] const std::string &value)
-    {
-        std::cout << "database:" << value << std::endl;
-        Config::get().database() = value;
-    }   
-    void handlePort([[maybe_unused]] const std::string &name,
-                    [[maybe_unused]] const std::string &value)
-    {
-        std::cout << "port:" << value << std::endl;
-        Config::get().port() = value;
-    }
-
-    void handleReadIP([[maybe_unused]] const std::string &name,
-                      [[maybe_unused]] const std::string &value)
-    {
-        std::cout << "read_ip:" << value << std::endl;
-        Config::get().read_request_ip() = value;
-    }
-
-    void handleWriteIP([[maybe_unused]] const std::string &name,
-                       [[maybe_unused]] const std::string &value)
-    {
-        std::cout << "write_ip:" << value << std::endl;
-        Config::get().write_request_ip() = value;
-    }
-
-    void handleQueueHost([[maybe_unused]] const std::string &name,
-                       [[maybe_unused]] const std::string &value)
-    {
-        std::cout << "queue host:" << value << std::endl;
-        Config::get().queue_host() = value;
-    }
-
-    void handleQueueTopic([[maybe_unused]] const std::string &name,
-                       [[maybe_unused]] const std::string &value)
-    {
-        std::cout << "queue topic:" << value << std::endl;
-        Config::get().queue_topic() = value;
-    }
-
-    void handleHelp([[maybe_unused]] const std::string &name,
-                    [[maybe_unused]] const std::string &value)
-    {
-        HelpFormatter helpFormatter(options());
-        helpFormatter.setCommand(commandName());
-        helpFormatter.setUsage("OPTIONS");
-        helpFormatter.setHeader(
-            "A web server that serves the current date and time.");
-        helpFormatter.format(std::cout);
-        stopOptionsProcessing();
-        _helpRequested = true;
-    }
-
     int main([[maybe_unused]] const std::vector<std::string> &args)
     {
-        if (!_helpRequested)
-        {
-            unsigned short port = (unsigned short)
-                                      config()
-                                          .getInt("HTTPWebServer.port", 80);
+            database::Author::init();
             std::string format(
                 config().getString("HTTPWebServer.format",
                                    DateTimeFormat::SORTABLE_FORMAT));
             
-            ServerSocket svs(Poco::Net::SocketAddress("0.0.0.0", port));
+            ServerSocket svs(Poco::Net::SocketAddress("0.0.0.0", 8080));
             HTTPServer srv(new HTTPRequestFactory(format),
                            svs, new HTTPServerParams);
             srv.start();
             waitForTerminationRequest();
             srv.stop();
-        }
+        
         return Application::EXIT_OK;
     }
 
-private:
-    bool _helpRequested;
 };
 #endif // !HTTPWEBSERVER

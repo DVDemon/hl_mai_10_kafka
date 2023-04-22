@@ -24,7 +24,7 @@ namespace database
         try
         {
 
-            Poco::Data::Session session = database::Database::get().create_session_write();
+            Poco::Data::Session session = database::Database::get().create_session();
             //*
             Statement drop_stmt(session);
             drop_stmt << "DROP TABLE IF EXISTS Author", now;
@@ -87,7 +87,7 @@ namespace database
     {
         try
         {
-            Poco::Data::Session session = database::Database::get().create_session_read();
+            Poco::Data::Session session = database::Database::get().create_session();
             Poco::Data::Statement select(session);
             Author a;
             select << "SELECT id, first_name, last_name, email, title FROM Author where id=?",
@@ -124,7 +124,7 @@ namespace database
     {
         try
         {
-            Poco::Data::Session session = database::Database::get().create_session_read();
+            Poco::Data::Session session = database::Database::get().create_session();
             Statement select(session);
             std::vector<Author> result;
             Author a;
@@ -161,7 +161,7 @@ namespace database
     {
         try
         {
-            Poco::Data::Session session = database::Database::get().create_session_read();
+            Poco::Data::Session session = database::Database::get().create_session();
             Statement select(session);
             std::vector<Author> result;
             Author a;
@@ -246,7 +246,7 @@ namespace database
 
         try
         {
-            Poco::Data::Session session = database::Database::get().create_session_write();
+            Poco::Data::Session session = database::Database::get().create_session();
             Poco::Data::Statement insert(session);
 
             insert << "INSERT INTO Author (first_name,last_name,email,title) VALUES(?, ?, ?, ?)",

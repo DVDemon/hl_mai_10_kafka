@@ -1,1 +1,10 @@
-sudo ./build/event_writer --read=127.0.0.1 --write=127.0.0.1 --port=3306 --login=stud --password=stud --database=stud --queue=127.0.0.1:9092 --topic=event_server --group_id=0
+export DB_HOST=127.0.0.1
+export DB_PORT=3360
+export DB_LOGIN=stud
+export DB_PASSWORD=stud
+export DB_DATABASE=archdb
+export QUEUE_HOST=127.0.0.1:9092
+export QUEUE_TOPIC=event_server
+export QUEUE_GROUP_ID=0
+
+./build/event_writer

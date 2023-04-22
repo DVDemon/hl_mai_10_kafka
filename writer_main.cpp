@@ -1,4 +1,3 @@
-#include <boost/program_options.hpp>
 #include <iostream>
 #include <csignal>
 #include <cppkafka/consumer.h>
@@ -6,42 +5,13 @@
 #include "config/config.h"
 
 #include "database/author.h"
-namespace po = boost::program_options;
 
 bool running = true;
 
-int main(int argc, char *argv[])
+int main()
 {
     try
     {
-        po::options_description desc{"Options"};
-        desc.add_options()("help,h", "This screen")("read,", po::value<std::string>()->required(), "set ip address for read requests")("write,", po::value<std::string>()->required(), "set ip address for write requests")("port,", po::value<std::string>()->required(), "databaase port")("login,", po::value<std::string>()->required(), "database login")("password,", po::value<std::string>()->required(), "database password")("database,", po::value<std::string>()->required(), "database name")("queue,", po::value<std::string>()->required(), "queue url")("topic,", po::value<std::string>()->required(), "topic name")("group_id,", po::value<std::string>()->required(), "consumer group_id name")("cache_servers,", po::value<std::string>()->required(), "iginite cache servers");
-
-        po::variables_map vm;
-        po::store(parse_command_line(argc, argv, desc), vm);
-
-        if (vm.count("help"))
-            std::cout << desc << '\n';
-
-        if (vm.count("read"))
-            Config::get().read_request_ip() = vm["read"].as<std::string>();
-        if (vm.count("write"))
-            Config::get().write_request_ip() = vm["write"].as<std::string>();
-        if (vm.count("port"))
-            Config::get().port() = vm["port"].as<std::string>();
-        if (vm.count("login"))
-            Config::get().login() = vm["login"].as<std::string>();
-        if (vm.count("password"))
-            Config::get().password() = vm["password"].as<std::string>();
-        if (vm.count("database"))
-            Config::get().database() = vm["database"].as<std::string>();
-        if (vm.count("queue"))
-            Config::get().queue_host() = vm["queue"].as<std::string>();
-        if (vm.count("topic"))
-            Config::get().queue_topic() = vm["topic"].as<std::string>();
-        if (vm.count("group_id"))
-            Config::get().queue_group_id() = vm["group_id"].as<std::string>();
-
         // Stop processing on SIGINT
         signal(SIGINT, [](int)
                { running = false; });
