@@ -48,6 +48,7 @@ class HTTPWebServer : public Poco::Util::ServerApplication
 protected:
     int main([[maybe_unused]] const std::vector<std::string> &args)
     {
+        try{
             database::Author::init();
             std::string format(
                 config().getString("HTTPWebServer.format",
@@ -59,6 +60,9 @@ protected:
             srv.start();
             waitForTerminationRequest();
             srv.stop();
+        }catch(std::exception &ex){
+            std::cerr << "---------- exception: " << ex.what() << std::endl;
+        }
         
         return Application::EXIT_OK;
     }
