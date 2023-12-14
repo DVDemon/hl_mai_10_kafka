@@ -1,11 +1,11 @@
 repo_name: DVDemon/hl_mai_10_kafka
-report_id: 75de74d613208f52b6b18f58913149a8
+report_id: c2cfec0616f0e0c729a1821bed4eed0b
 repo_type: Public
-timestamp: '2023-11-10T07:47:32+00:00'
+timestamp: '2023-12-14T10:12:52+00:00'
 requested_by: DVDemon
 provider: github
 branch: master
-detected_tools_count: 7
+detected_tools_count: 12
 tools:
 - name: C++
   description: Has imperative, object-oriented and generic programming features, while
@@ -17,6 +17,18 @@ tools:
   sub_category: Languages
   image_url: https://img.stackshare.io/service/1049/cplusplus.png
   detection_source: Repo Metadata
+- name: Node.js
+  description: A platform built on Chrome's JavaScript runtime for easily building
+    fast, scalable network applications
+  website_url: http://nodejs.org/
+  open_source: true
+  hosted_saas: false
+  category: Languages & Frameworks
+  sub_category: Frameworks (Full Stack)
+  image_url: https://img.stackshare.io/service/1011/n1JRsFeB_400x400.png
+  detection_source: docker/docker-compose.yml
+  last_updated_by: Dmitriy Dzyuba
+  last_updated_on: 2021-04-25 13:36:35.000000000 Z
 - name: Kafka
   description: Distributed, fault tolerant, high throughput pub-sub messaging system
   website_url: http://kafka.apache.org/
@@ -29,6 +41,28 @@ tools:
   detection_source: docker/docker-compose.yml
   last_updated_by: Dmitriy Dzyuba
   last_updated_on: 2023-04-23 15:34:36.000000000 Z
+- name: MySQL
+  description: The world's most popular open source database
+  website_url: http://www.mysql.com
+  open_source: true
+  hosted_saas: false
+  category: Data Stores
+  sub_category: Databases
+  image_url: https://img.stackshare.io/service/1025/logo-mysql-170x170.png
+  detection_source: docker/docker-compose.yml
+  last_updated_by: Dmitriy Dzyuba
+  last_updated_on: 2021-04-25 13:36:35.000000000 Z
+- name: pgvector
+  description: Open-source vector similarity search for Postgres
+  website_url: https://github.com/pgvector/pgvector/
+  open_source: false
+  hosted_saas: false
+  category: Data Stores
+  sub_category: Database Tools
+  image_url: https://img.stackshare.io/service/109221/default_b888cdf5617d936aa6aacf130911906955508639.png
+  detection_source: CMakeLists.txt
+  last_updated_by: Dmitriy Dzyuba
+  last_updated_on: 2021-04-25 13:36:35.000000000 Z
 - name: CMake
   description: 'An open-source system that manages the build process '
   website_url: http://www.cmake.org/
@@ -57,6 +91,26 @@ tools:
   sub_category: Version Control System
   image_url: https://img.stackshare.io/service/1046/git.png
   detection_source: Repo Metadata
+- name: HTML
+  description: Hypertext Markup Language for creating web pages.
+  website_url: http://
+  open_source: false
+  hosted_saas: false
+  image_url: https://img.stackshare.io/service/2270/no-img-open-source.png
+  detection_source: content/index.html
+  last_updated_by: Dmitriy Dzyuba
+  last_updated_on: 2021-04-25 13:36:35.000000000 Z
+- name: LangChain
+  description: Build AI apps with LLMs through composability
+  website_url: https://github.com/hwchase17/langchain
+  open_source: true
+  hosted_saas: false
+  category: Communications
+  sub_category: Large Language Model Tools
+  image_url: https://img.stackshare.io/service/48790/default_5b6c6b73f1ff3775c85d2a1ba954cb87e30cbf13.jpg
+  detection_source: CMakeLists.txt
+  last_updated_by: Dmitriy Dzyuba
+  last_updated_on: 2021-04-25 13:36:35.000000000 Z
 - name: Shell
   description: A shell is a text-based terminal, used for manipulating programs and
     files. Shell scripts typically manage program execution.
@@ -75,6 +129,6 @@ tools:
   category: Languages & Frameworks
   sub_category: Operating Systems
   image_url: https://img.stackshare.io/service/3511/cof_orange_hex.jpg
-  detection_source: docker/my_writer/Dockerfile
+  detection_source: docker/my_service/Dockerfile
   last_updated_by: Dmitriy Dzyuba
   last_updated_on: 2023-04-22 16:53:15.000000000 Z
